@@ -1,0 +1,80 @@
+# aws cloudformation create-stack --template-body file:///Users/xx/Desktop/Excercises/ECS/SimpleECS-Cluster-Service-TaskDefinition.yaml --stack-name SimpleECS-Cluster-Service-TaskDefinition
+
+# Modify the ExecutionRoleArn, TaskRoleArn and NetworkConfiguration (SecurityGroups, PublicSubnets) accordingly
+
+Parameters:
+  PlatformVersion: 
+    Default: 1.4.0
+    Type: String
+  SecurityGroups:
+    Description: Security group with port 80 open
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Default: sg-eb4084a5
+  PublicSubnets:
+    Description: Choose Public subnets with has IGW
+    Type: List<AWS::EC2::Subnet::Id>
+    Default: subnet-8c9c0ba2 , subnet-a8891cf4
+
+Resources:
+  MyECSCluster:
+    Type: 'AWS::ECS::Cluster'
+  MyTaskDef:
+    Type: 'AWS::ECS::TaskDefinition'
+    Properties:
+      Memory: 512
+      Cpu: 256
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Image: nginx 
+          Name: nginx
+          Memory: 512
+          Cpu: 256
+          PortMappings:
+            - ContainerPort: 80
+              HostPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-group: /ecs/nginx
+              awslogs-stream-prefix: nginx
+              awslogs-create-group: 'true'
+      RequiresCompatibilities: 
+        - "EC2"
+        - "FARGATE" 
+      ExecutionRoleArn: !Join [ '' , [ 'arn:aws:iam::' , !Ref 'AWS::AccountId' , ':role/' , 'ecsTaskExecutionRole' ]] 
+      # TaskRoleArn: !Join [ '' , [ 'arn:aws:iam::' , !Ref 'AWS::AccountId' , ':role/' , 'ddTaskRole' ]] 
+
+  MyECSService:
+    Type: 'AWS::ECS::Service'
+    Properties:
+      Cluster: !Ref MyECSCluster
+      DesiredCount: '1'
+      LaunchType: FARGATE
+      TaskDefinition: !Ref MyTaskDef
+      PlatformVersion: !Ref PlatformVersion
+      NetworkConfiguration: 
+        AwsvpcConfiguration: 
+          AssignPublicIp: ENABLED
+          SecurityGroups: !Ref SecurityGroups
+          Subnets: !Ref PublicSubnets
+          
+# If needs an EC2 launch type need to change the "LaunchType: EC2"
+  # MyEC2Instance:
+  #   DependsOn: MyECSService
+  #   Type: 'AWS::EC2::Instance'
+  #   Properties:
+  #     ImageId: ami-02f5ea673e84393c9
+  #     KeyName: YourKeyName
+  #     SubnetId: !Ref PublicSubnets
+  #     InstanceType: t2.micro
+  #     SecurityGroupIds: !Ref SecurityGroups
+  #     IamInstanceProfile: ecsInstanceRole
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Ref 'AWS::StackName'
+  #     UserData:
+  #       Fn::Base64: !Sub |
+  #         #!/bin/bash -xe
+  #         echo ECS_CLUSTER=${MyECSCluster} >> /etc/ecs/ecs.config
