@@ -37,8 +37,8 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-region: !Ref 'AWS::Region'
-              awslogs-group: /ecs/tullyrankin/flask-hello-world
-              awslogs-stream-prefix: tullyrankin/flask-hello-world
+              awslogs-group: /ecs/digitalocean/flask-hello-world
+              awslogs-stream-prefix: digitalocean/flask-hello-world
               awslogs-create-group: 'true'
       RequiresCompatibilities: 
         - "EC2"
