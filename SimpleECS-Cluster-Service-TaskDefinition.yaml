@@ -25,8 +25,8 @@ Resources:
       Cpu: 256
       NetworkMode: awsvpc
       ContainerDefinitions:
-        - Image: nginx 
-          Name: nginx
+        - Image: tullyrankin/flask-hello-world
+          Name: tullyrankin/flask-hello-world
           Memory: 512
           Cpu: 256
           PortMappings:
@@ -37,8 +37,8 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-region: !Ref 'AWS::Region'
-              awslogs-group: /ecs/nginx
-              awslogs-stream-prefix: nginx
+              awslogs-group: /ecs/tullyrankin/flask-hello-world
+              awslogs-stream-prefix: tullyrankin/flask-hello-world
               awslogs-create-group: 'true'
       RequiresCompatibilities: 
         - "EC2"
