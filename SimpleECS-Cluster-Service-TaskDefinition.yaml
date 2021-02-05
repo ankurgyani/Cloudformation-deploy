@@ -25,13 +25,13 @@ Resources:
       Cpu: 256
       NetworkMode: awsvpc
       ContainerDefinitions:
-        - Image: nginx                                                   #gyania/flaskdemo:flask-helloworld
-          Name:  nginx                                                        #flask-hello-world
+        - Image: gyania/flaskdemo:flask-helloworld
+          Name:  flask-hello-world
           Memory: 512
           Cpu: 256
           PortMappings:
-            - ContainerPort: 80
-              HostPort: 80
+            - ContainerPort: 5000
+              HostPort: 5000
               Protocol: tcp
           LogConfiguration:
             LogDriver: awslogs
