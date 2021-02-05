@@ -25,7 +25,7 @@ Resources:
       Cpu: 256
       NetworkMode: awsvpc
       ContainerDefinitions:
-        - Image: gyania/flaskdemo:flask-helloworld
+        - Image: gyania/flaskdemo:hello
           Name:  flask-hello-world
           Memory: 512
           Cpu: 256
@@ -37,8 +37,8 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-region: !Ref 'AWS::Region'
-              awslogs-group: /ecs/nginx
-              awslogs-stream-prefix: nginx
+              awslogs-group: /ecs/flask-helloworld
+              awslogs-stream-prefix: flask-helloworld
               awslogs-create-group: 'true'
       RequiresCompatibilities: 
         - "EC2"
