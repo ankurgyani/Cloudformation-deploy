@@ -3,7 +3,7 @@ Automate infrastructure provisioing on AWS with cloudformation template deployed
 
 
 ## Infrastructure 
-I have used a simple flask webapp to deploy on the AWS console using ECS via Fargate launch type. The deployment is done through a Cloudformation template which gets deployed using Jenkins(through the Jenkinsfile). The application can be accessed by navigating to the Public IP of the Task(``my-stack``) in the ECS service console. The IAM roles required to complete this task were created manually in the aws console. I have used the default VPC and default security groups.
+I have used a simple flask webapp to deploy on the AWS console using ECS via Fargate launch type. The deployment is done through a Cloudformation template which gets deployed using Jenkins(through the Jenkinsfile). The application can be accessed by navigating to the Public IP of the Task(``my-stack``) in the ECS service console and running it on port 5000 (```eg-http://3.85.235.254:5000/```) . The IAM roles required to complete this task were created manually in the aws console. I have used the default VPC and default security groups.
 
 ## Application 
 The application is a simple flask web-app which is rendering a message on the web page. The application is dockerized and the image is pushed to my dockerhub repository which is public https://hub.docker.com/r/gyania/flaskdemo. 
