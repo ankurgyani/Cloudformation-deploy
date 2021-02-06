@@ -1,7 +1,3 @@
-# aws cloudformation create-stack --template-body file:///Users/xx/Desktop/Excercises/ECS/SimpleECS-Cluster-Service-TaskDefinition.yaml --stack-name SimpleECS-Cluster-Service-TaskDefinition
-
-# Modify the ExecutionRoleArn, TaskRoleArn and NetworkConfiguration (SecurityGroups, PublicSubnets) accordingly
-
 Parameters:
   PlatformVersion: 
     Default: 1.4.0
@@ -60,21 +56,3 @@ Resources:
           SecurityGroups: !Ref SecurityGroups
           Subnets: !Ref PublicSubnets
           
-# If needs an EC2 launch type need to change the "LaunchType: EC2"
-  # MyEC2Instance:
-  #   DependsOn: MyECSService
-  #   Type: 'AWS::EC2::Instance'
-  #   Properties:
-  #     ImageId: ami-02f5ea673e84393c9
-  #     KeyName: YourKeyName
-  #     SubnetId: !Ref PublicSubnets
-  #     InstanceType: t2.micro
-  #     SecurityGroupIds: !Ref SecurityGroups
-  #     IamInstanceProfile: ecsInstanceRole
-  #     Tags:
-  #       - Key: Name
-  #         Value: !Ref 'AWS::StackName'
-  #     UserData:
-  #       Fn::Base64: !Sub |
-  #         #!/bin/bash -xe
-  #         echo ECS_CLUSTER=${MyECSCluster} >> /etc/ecs/ecs.config
